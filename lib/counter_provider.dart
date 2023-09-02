@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CounterProvider with ChangeNotifier {
-  int count = 0;
+  int _count = 0; // Make it private
+  int get counter => _count; // let the outside world access it
 
   CounterProvider();
 
   void incrementCounter() {
-    count++;
+    _count++;
     notifyListeners();
   }
 
   void decrementCount() {
-    if (count > 0) {
-      --count;
+    if (_count > 0) {
+      --_count;
       notifyListeners();
     }
   }

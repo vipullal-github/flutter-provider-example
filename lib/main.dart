@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_provider_example/counter_provider.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';
 
 void main() {
@@ -7,6 +9,13 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  Widget _wrapHomePageWithProvider() {
+    return ChangeNotifierProvider<CounterProvider>(
+      create: (context) => CounterProvider(),
+      builder: (context, child) => const HomePage(),
+    );
+  }
 
   // This widget is the root of your application.
   @override
@@ -17,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: false,
       ),
-      home: const HomePage(),
+      home: _wrapHomePageWithProvider(),
     );
   }
 }
