@@ -39,3 +39,46 @@ Widget _wrapHomePageWithProvider() {
 ```
 The ChangeNotifierProvider requires us to provide a create function and a builder function. The create function should instantiate the provider class and the builder function should build the widget.
 
+### The Consumer widget
+Once the Provider has been injected into the Widget tree, there are several ways to access the provider and it's data. In the present example, we have used a Consumer widget (also defined in the Provider package) to get a handle to the provider and it's data and methods.
+
+The Consumer widgets constructor is defined as:
+
+```
+class Consumer<T> extends SingleChildStatelessWidget {
+  Consumer({
+    Key? key,
+    required this.builder,
+    Widget? child,
+  }) 
+```
+
+As you can see from the above snipet extracted from the Provider library, the Consumer widget's constructor requires a builder method. This builder method gets the provider instance as the second parameter. Using the consumer widget also sets up a dependency between the provider and the widget in that whenever the provider calls "notofyListeners", the widget wrapping the consumer gets rebuilt. Hence, the widget displaying the state data can be a stateless widget. Now the widget is ONLY responsible in displaying the data and is very clean. 
+
+Using the Consumer widget wraps the whole widget and the whole widget gets rebuilt. This can be very expensive if the state is complex, consisting of several widgets. 
+
+But worry not! There are other ways of accessing the state of the provider.
+
+If some data items of the state are needed only for display and do not change. In this case, we can use:
+
+```
+  String title = Provider.of<CounterProvider>(context, listen:false ).title;
+```
+
+If we use this construct, then the widget will not be rebuilt. We can use this in some part of the subtree which does not need to be rebuilt.
+
+**In this example, the AppBar will be rebuilt even though we are using the Listen = false in the above call Don't do this in production code!**
+
+There is another set of calls that can be used:
+
+```
+  String title = context.read<CounterProvider>().title;  // readonly connectioon
+  context.watch<CounterProvider>();   // establishes a dependency between the provider and the widget
+
+```
+
+All these are defined in Provider.dart and are relatively easy to understand once you understand the basics.
+
+Happy Coding!
+
+
